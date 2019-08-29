@@ -1,0 +1,111 @@
+.headerWrapper {
+    height: 10vh;
+    background: #fff;
+}
+
+.container-fluid {
+    background: #fff;
+}
+
+.rightToolbar {
+    height: 100%;
+    float: right;
+    width: 30%;
+}
+
+.login-button {
+    border-radius: 20px;
+    font-size: 14px;
+    line-height: 2;
+    min-width: 90px;
+    float: right;
+    background: #5f5f5f;
+    border: none;
+    text-decoration: none;
+}
+
+.login-button:active:focus {
+    background: #5f5f5e;
+}
+
+.login-button:hover {
+    box-shadow: 2px 7px 18px 1px rgba(95, 95, 95, 0.76);
+    transition: 0.7s;
+}
+
+.dropdown {
+    position: relative;
+    float: right;
+    z-index : 10;
+}
+
+.dropdown:hover {
+    .dropdown-content {
+        display: block;
+        transition: 0.5s;
+    }
+}
+
+.dropdown-content:hover {
+    display: block;
+    transition: 1s;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    padding: 0;
+    min-height: 120px;
+    min-width: 220px;
+    // top: 86px;
+    right: 1px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    a {
+        padding: 20px 10px;
+        display: block;
+        text-decoration: none;
+        color: grey;
+        font-weight: 400;
+    }
+    a:hover {
+        background-color: #5f5f5f;
+        color: white;
+        transition: 0.7s;
+        border-radius: 5px;
+    }
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.profilePic {
+    margin-right: 0px;
+    border-radius: 50%;
+    display: -webkit-box;
+    img {
+        cursor: pointer;
+        width: 70px;
+        height: 70px;
+    }
+    p {
+        margin-top: 30px;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+}
+
+.profileDetails {
+    position: absolute;
+    background: whitesmoke;
+    color: black;
+    display: inline;
+    min-width: 100px;
+}
+
+.left-logo {
+    max-width: 20%;
+    img {
+        cursor: pointer;
+        max-height: 10vh;
+    }
+}
