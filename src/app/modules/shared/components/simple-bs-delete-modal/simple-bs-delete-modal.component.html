@@ -1,0 +1,20 @@
+<div class="modal fade" id="{{deleteModalID}}" tabindex="-1" role="dialog" [attr.aria-labelledby]="deleteModalID" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalTitle">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+                </div>
+                <div class="modal-body">
+                    <b class="modal-text" style="font-size: 17px; font-weight:500;">Are you sure you want to delete {{deleteContext?.contextName || deleteContext?.context || 'this'}} ?</b>
+                    <h6 *ngIf="deleteContext !== null && deleteContext['context'] === 'node'" style="font-size: 14px; padding-top: 15px; font-weight: 400;">[NOTE] : Deleting a node will also delete the relationships connected with the node. <span style="color: red;">Proceed with caution</span></h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn ui-button-text later" data-dismiss="modal">Maybe Later</button>
+                    <button type="button" class="btn btn-danger" (click)="submitDelete(deleteContext)" id="del_btn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>

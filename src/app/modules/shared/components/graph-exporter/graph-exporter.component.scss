@@ -1,0 +1,14 @@
+.export-btn {
+    button {
+        border-radius: 0;
+        background: #e4e4e4;
+        color: #000;
+        -webkit-box-shadow: -4px 4px 14px -9px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: -4px 4px 14px -9px rgba(0, 0, 0, 0.75);
+        box-shadow: -4px 4px 14px -9px rgba(0, 0, 0, 0.75);
+    }
+    button:active {
+        box-shadow: none;
+        transition: 0.5s;
+    }
+}
