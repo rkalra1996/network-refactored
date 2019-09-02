@@ -1,9 +1,10 @@
-<visualizer-toolbar></visualizer-toolbar>
+<visualizer-toolbar [editData]="editNodeData" [editRelData]="editRelationData"></visualizer-toolbar>
 <div class="graph-container" id="graphViewer">
 </div>
-<!-- <ng-template *ngIf="showlimiterror" let-popup #popupTemplate>
+
+<ng-template  let-popup #popupTemplate>
   <div class="header">Rating</div>
   <div class="content">
       <sui-rating class="star" (click)="popup.close()"></sui-rating>
   </div>
-</ng-template> -->
+</ng-template>
