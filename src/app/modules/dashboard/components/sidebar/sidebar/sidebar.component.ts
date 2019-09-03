@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { SharedGraphService } from 'src/app/modules/visualizer/services/shared-graph-service/shared-graph.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'dashboard-sidebar',
@@ -8,7 +9,7 @@ import { SharedGraphService } from 'src/app/modules/visualizer/services/shared-g
 })
 export class SidebarComponent implements OnInit {
 
-  @Output() eventClicked = new EventEmitter<object>();
+  @Output() sidebarBtnClicked = new EventEmitter<object>();
   public btnTextReset = "Reset";
   public btnTextApply = "Apply";
   public selectedAttributeOptions: Array<object> = [];
@@ -21,10 +22,8 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
   }
   searchGraph(isClicked: object = {isClicked : false},clickedFrom: string = 'node') {
-    console.log("searchGraph");
     if (isClicked) {
       // button is clicked
-      let requestBody;
       this.selectedGraph = [];
       if (this.selectedAttributeOptions) {
         Object.keys(this.selectedAttributeOptions).forEach(selectedKey => {
@@ -33,16 +32,13 @@ export class SidebarComponent implements OnInit {
         }
       });
       if (this.selectedGraph.length > 0) {
-        requestBody = { nodes: this.selectedGraph };
+        this.sidebarBtnClicked.emit({ event: 'search', nodes: this.selectedGraph });
       } else {
         // if no selected element
-        requestBody = {};
+        this.sidebarBtnClicked.emit({event: 'search'});
       }
     }
-    console.log('request is made like ', requestBody)
-    this.sharedGraphData.setGraphData(requestBody);
-    let obj = { event: 'search' };
-    this.eventClicked.emit(obj);
+    
     } else {
       // button is not clicked
     }
@@ -58,6 +54,12 @@ export class SidebarComponent implements OnInit {
       element.classList.remove("selected");
     }
     let obj = { event: 'reset' };
-    this.eventClicked.emit(obj);
+    this.sidebarBtnClicked.emit(obj);
+  }
+  // to store selecetd dropdown data from child node-filter
+  setSelectedData(selectedData: object = null){
+    if(selectedData){
+      this.selectedAttributeOptions = _.cloneDeep(selectedData);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { forkJoin, throwError } from 'rxjs';
 import * as _ from 'lodash';
 import { GraphNodeService } from '../../../services/graph-node-service/graph-node.service';
@@ -13,6 +13,7 @@ import { map } from 'rxjs/operators';
 })
 export class NodeFilterComponent implements OnInit {
 
+  @Output() selectedData = new EventEmitter<object>(null);
   public totalAtrributeOptions: Array<object> = [];
   public selectedAttributeOptions: Array<object> = [];
   public selectedGraph: { type: string, value: Array<string> }[] = [];
@@ -150,7 +151,7 @@ processData(data) {
 prepareSelectedDropdown(event:object){
   if(event){
     this.selectedDropdownOptions[Object.keys(event)[0]] = event[Object.keys(event)[0]];
-    console.log(this.selectedDropdownOptions);
+    this.selectedData.emit(this.selectedDropdownOptions);
   }  
 }
 }
