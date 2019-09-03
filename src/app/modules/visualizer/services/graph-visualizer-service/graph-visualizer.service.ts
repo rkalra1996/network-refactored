@@ -25,4 +25,15 @@ export class GraphVisualizerService {
       }
     }));
   }
+  getSearchDataV2(body) {
+     const url = 'http://localhost:3050/api/graph/datav2';
+   // const url = '/api/graph/datav2';
+    return this.publicHttp.post(url, body).pipe(map(data => {
+      if (!!data) {
+        return data;
+      } else {
+        return of({});
+      }
+    }));
+  }
 }

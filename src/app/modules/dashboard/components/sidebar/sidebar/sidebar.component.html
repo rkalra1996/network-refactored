@@ -3,7 +3,7 @@
         <div class="sidebarBodyTitle">
             <p>Filter By Attributes</p>
         </div>
-        <dashboard-node-filter></dashboard-node-filter>
+        <dashboard-node-filter (selectedData)="setSelectedData($event)"></dashboard-node-filter>
         <div class="btn-container d-flex justify-content-around">
             <shared-gray-button [btnText]="btnTextReset" (clicked)="resetGraph($event)"></shared-gray-button>
             <shared-gray-button [btnText]="btnTextApply" (clicked)="searchGraph($event)"></shared-gray-button>

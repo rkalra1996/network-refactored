@@ -16,8 +16,7 @@ export class GrayButtonComponent implements OnInit {
   }
 
   clickTriggered() {
-    console.log("gr",{isClicked: true});
-    this.clicked.next({isClicked: true});
+    this.clicked.emit({isClicked: true});
   }
 
 }

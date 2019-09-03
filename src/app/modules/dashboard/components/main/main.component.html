@@ -1,3 +1,3 @@
 <dashboard-header></dashboard-header>
-<dashboard-sidebar></dashboard-sidebar>
-<visualizer-vis-graph></visualizer-vis-graph>
+<dashboard-sidebar (sidebarBtnClicked)="sidebarEventFetch($event)"></dashboard-sidebar>
+<visualizer-vis-graph [sidebarBtnClicked]="sidebarEvent"></visualizer-vis-graph>

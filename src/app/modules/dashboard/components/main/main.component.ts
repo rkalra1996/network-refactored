@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
+  public sidebarEvent: object = null;
   constructor() { }
 
   ngOnInit() {
   }
-
+  sidebarEventFetch(event : object = null){
+    if(event){
+      this.sidebarEvent = event;
+    }
+  }
 }

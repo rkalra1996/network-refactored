@@ -23,13 +23,7 @@ export class SharedGraphService {
   public relationsData = new BehaviorSubject<any>(null);
 
   constructor() { }
-  setGraphData(graphdata){
-    this.graphData = graphdata;
-  }
-  getGraphData(){
-    return this.graphData;
-  }
-
+  
   getNodeDetails(nodeIDs, forRestore = false) {
       this.restoreConnectedNodesData = forRestore ? true : false;
       this.getNodeByIDs.next(nodeIDs);
