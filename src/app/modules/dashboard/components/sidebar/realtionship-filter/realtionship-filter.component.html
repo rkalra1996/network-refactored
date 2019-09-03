@@ -1,0 +1,9 @@
+<sui-multi-select [(ngModel)]="selectedRelation" [options]="relationOptions" [maxSelected]="15" #relation>
+    <div class="ui icon search input">
+        <i class="search icon"></i>
+        <input suiSelectSearch type="text" placeholder="Search Relationships...">
+    </div>
+    <div class="scrolling menu">
+        <sui-select-option *ngFor="let o of relation.filteredOptions" [value]="o"></sui-select-option>
+    </div>
+</sui-multi-select>

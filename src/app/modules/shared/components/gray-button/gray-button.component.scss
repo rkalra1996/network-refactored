@@ -1,0 +1,24 @@
+.searchBtnWrapper {
+    font-family: 'Kanit', sans-serif;
+    font-size: 18px;
+    text-align: center;
+    position: relative;
+    margin-bottom: 20px;
+    bottom: 0;
+    // width: 100%;
+    // margin-right: 20px;
+    button {
+        background: #e4e4e4;
+        color: #000;
+        min-width: 100px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    }
+    button:active {
+        box-shadow: none;
+        transition: 0.5s;
+    }
+}
+
+.btn-sidebar {
+    display: inline;
+}

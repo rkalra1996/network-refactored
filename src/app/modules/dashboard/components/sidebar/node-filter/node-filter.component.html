@@ -1,0 +1,9 @@
+<div class="sidebarElements" *ngIf="totalAtrributeOptions?.length > 0">
+    <div class="item-container">
+        <div class="item" *ngFor="let attributeOptions of totalAtrributeOptions; let i = index">
+            <div *ngIf="attributeOptions">
+                <shared-custom-semantic-dropdown [attributeOptions]="attributeOptions" (selectedKeys)="prepareSelectedDropdown($event)"></shared-custom-semantic-dropdown>
+            </div>
+        </div>
+    </div>
+</div>

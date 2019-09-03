@@ -1,0 +1,19 @@
+.sidebarElements {
+    width: 100%;
+    padding: 25px 0;
+}
+
+.item-container {
+    height: 40vh;
+    overflow-y: auto;
+}
+
+.item-container::-webkit-scrollbar {
+    display: none;
+}
+
+.item,
+.item span ::ng-deep {
+    min-height: 50px;
+    line-height: 2.7;
+}
