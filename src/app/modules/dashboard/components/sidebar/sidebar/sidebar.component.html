@@ -1,0 +1,37 @@
+<div class="wrapper sidebar-wrapper">
+    <div class="sidebarBody p-0">
+        <div class="sidebarBodyTitle">
+            <p>Filter By Attributes</p>
+        </div>
+        <dashboard-node-filter></dashboard-node-filter>
+        <div class="btn-container d-flex justify-content-around">
+            <shared-gray-button [btnText]="btnTextReset" (clicked)="resetGraph($event)"></shared-gray-button>
+            <shared-gray-button [btnText]="btnTextApply" (clicked)="searchGraph($event)"></shared-gray-button>
+        </div>
+        <div class="sidebarBodyTitle">
+            <p>Filter By Relationships</p>
+        </div>
+        <div class="sidebarElements">
+            <div class="item">
+                <dashboard-realtionship-filter></dashboard-realtionship-filter>
+                <!-- <div class="btn-container d-flex justify-content-around">
+            <div class="searchBtnWrapper btn-sidebar">
+                <button class="btn btn-default btn-md searchBtn" (click)="resetGraph()">Reset</button>
+            </div>
+            <div class="searchBtnWrapper btn-sidebar">
+                <button class="btn btn-default btn-md searchBtn" (click)="relationSearchGraph()">Apply</button>
+            </div>
+
+        </div> -->
+                <div class="btn-container d-flex justify-content-around">
+                    <shared-gray-button [btnText]="btnTextReset" (clicked)="resetGraph($event)"></shared-gray-button>
+                    <shared-gray-button [btnText]="btnTextApply" (clicked)="searchGraph($event,'relation')"></shared-gray-button>
+                </div>
+                <div class="btn-container d-flex justify-content-around">
+                    <span>Show deleted data</span>
+                    <shared-toggle-switch (toggleEvent)="NodeLimitToggleHandler($event)"></shared-toggle-switch>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

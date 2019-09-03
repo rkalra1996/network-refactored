@@ -1,0 +1,23 @@
+<div class="item">
+    <span class="">
+
+</span>
+    <a class="item-text hoverable" (click)="networkElementClick(attributeOptions['attribute']);attributeOptions['rotate'] = !attributeOptions['rotate']" data-toggle="collapse" href="#collapseExample{{i}}" role="button" [attr.aria-expanded]="attributeOptions['rotate']"
+        [attr.aria-controls]="'collapseExample'+i" [ngClass]="{'rotate': attributeOptions['rotate'], 'no-rotate': !attributeOptions['rotate']}">{{attributeOptions['attribute']}}
+    <span class="ele-count count-org">{{attributeOptions['options'].length}}</span>
+</a>
+    <span class="fas fa-chevron-right" data-toggle="collapse" [attr.href]="'#collapseExample'+i" role="button" [attr.aria-expanded]="attributeOptions?.rotate" [attr.aria-controls]="'collapseExample'+i" (click)="attributeOptions['rotate'] = !attributeOptions['rotate']"
+        [ngClass]="{'rotate': attributeOptions?.rotate, 'no-rotate': !attributeOptions?.rotate}">
+</span>
+    <div class="collapse" [ngClass]="{'show-drop': attributeOptions?.rotate, 'hide-drop': !attributeOptions?.rotate}">
+        <sui-multi-select [(ngModel)]="selectedAttributeOptions[attributeOptions['attribute']]" [options]="attributeOptions['options']" [maxSelected]="15" (ngModelChange)="emitSelectedData()" #totalAtrributeOptions>
+            <div class="ui icon search input">
+                <i class="search icon"></i>
+                <input suiSelectSearch type="text" placeholder="Search {{attributeOptions['attribute']}}...">
+            </div>
+            <div class="scrolling menu">
+                <sui-select-option *ngFor="let o of totalAtrributeOptions.filteredOptions" [value]="o"></sui-select-option>
+            </div>
+        </sui-multi-select>
+    </div>
+</div>

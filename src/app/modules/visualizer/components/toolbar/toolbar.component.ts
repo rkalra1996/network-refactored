@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'visualizer-toolbar',
@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
 
+  @Input() editData: object = {};
+  @Input() editRelData: object = {};
   public selectedCount = 10;
   public nodeLimit = 10;
   public errorMessage = "hello";
