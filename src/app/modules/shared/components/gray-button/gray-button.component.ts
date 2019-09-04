@@ -1,3 +1,9 @@
+/**
+ * Gray Button
+ * @created_date 02/09/2019
+ * @version 1.0.0
+ * @author Neha Verma
+ */
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
@@ -15,6 +21,11 @@ export class GrayButtonComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Clicks triggered
+   * @description emit show deleted toggle status
+   * @author Rishabh Kalra
+   */
   clickTriggered() {
     this.clicked.emit({isClicked: true});
   }
