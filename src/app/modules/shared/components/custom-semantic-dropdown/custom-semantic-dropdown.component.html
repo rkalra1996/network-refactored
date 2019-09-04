@@ -3,9 +3,11 @@
 
 </span>
     <a class="item-text hoverable" (click)="networkElementClick(attributeOptions['attribute']);attributeOptions['rotate'] = !attributeOptions['rotate']" data-toggle="collapse" href="#collapseExample{{i}}" role="button" [attr.aria-expanded]="attributeOptions['rotate']"
-        [attr.aria-controls]="'collapseExample'+i" [ngClass]="{'rotate': attributeOptions['rotate'], 'no-rotate': !attributeOptions['rotate']}">{{attributeOptions['attribute']}}
-    <span class="ele-count count-org">{{attributeOptions['options'].length}}</span>
-</a>
+        [attr.aria-controls]="'collapseExample'+i" [ngClass]="{'rotate': attributeOptions['rotate'], 'no-rotate': !attributeOptions['rotate']}">
+        <span class="ele-text" *ngIf="attributeOptions['attribute'] && attributeOptions['attribute'].length <= 20">{{attributeOptions['attribute']}}</span>
+        <span class="ele-text" data-toggle="tooltip" [attr.title]="attributeOptions['attribute']" *ngIf="attributeOptions['attribute'] && attributeOptions['attribute'].length > 20">{{attributeOptions['attribute'] | slice:0:21 }}...</span>
+        <span class="ele-count count-org">{{attributeOptions['options'].length}}</span>
+    </a>
     <span class="fas fa-chevron-right" data-toggle="collapse" [attr.href]="'#collapseExample'+i" role="button" [attr.aria-expanded]="attributeOptions?.rotate" [attr.aria-controls]="'collapseExample'+i" (click)="attributeOptions['rotate'] = !attributeOptions['rotate']"
         [ngClass]="{'rotate': attributeOptions?.rotate, 'no-rotate': !attributeOptions?.rotate}">
 </span>

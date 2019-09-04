@@ -5,6 +5,7 @@ import { GraphNodeService } from '../../../services/graph-node-service/graph-nod
 import { SharedGraphService } from 'src/app/modules/visualizer/services/shared-graph-service/shared-graph.service';
 import { SearchService } from 'src/app/modules/visualizer/services/search-service/search.service';
 import { map } from 'rxjs/operators';
+import { ResetInterface, SelectedNodeInterface } from '../../../interfaces/sidebar-interface';
 
 @Component({
   selector: 'dashboard-node-filter',
@@ -13,10 +14,11 @@ import { map } from 'rxjs/operators';
 })
 export class NodeFilterComponent implements OnInit {
 
+  @Input() resetObj: ResetInterface = {reset: false};
   @Output() selectedData = new EventEmitter<object>(null);
   public totalAtrributeOptions: Array<object> = [];
   public selectedAttributeOptions: Array<object> = [];
-  public selectedGraph: { type: string, value: Array<string> }[] = [];
+  public selectedGraph: Array<SelectedNodeInterface> = [];
   public graphData: object = {};
   public totalNodesProperties: object = {};
   public totalRelationsProperties: object = {};
@@ -38,6 +40,8 @@ export class NodeFilterComponent implements OnInit {
   ngOnInit() {
     this.getGraph();
   }
+
+  
   // set all data in sidebar dropdown
   getGraph() {
     this.totalAtrributeOptions = [];

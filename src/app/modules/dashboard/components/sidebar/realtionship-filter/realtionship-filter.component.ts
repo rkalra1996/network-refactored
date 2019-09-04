@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { SharedGraphService } from 'src/app/modules/visualizer/services/shared-graph-service/shared-graph.service';
 import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { GraphRelationsService } from '../../../services/graph-relations-service/graph-relations.service';
+import { ResetInterface } from '../../../interfaces/sidebar-interface';
 
 @Component({
   selector: 'dashboard-realtionship-filter',
   templateUrl: './realtionship-filter.component.html',
   styleUrls: ['./realtionship-filter.component.scss']
 })
-export class RealtionshipFilterComponent implements OnInit {
+
+
+export class RealtionshipFilterComponent implements OnInit, OnChanges {
   
+  @Input() resetObj: ResetInterface = {reset: false};
+  @Output() selectedData = new EventEmitter<Array<string>>(null);
   public selectedRelation: Array<string> = [];
   public relationOptions: Array<string> = [];
   public relationTypeOptions: Array<any> = [];
@@ -24,6 +29,13 @@ export class RealtionshipFilterComponent implements OnInit {
       this.relationOptions = this.relationTypeOptions;
     });
   }
+
+  ngOnChanges(){
+    if(this.resetObj && typeof this.resetObj === 'object' && this.resetObj.hasOwnProperty('reset') && this.resetObj['reset'] === true){
+      this.selectedRelation = [];
+    }
+  }
+
   getRelationTypes() {
     return this.graphRelationsService.getGraphRelations().pipe(map(response => {
 
@@ -39,6 +51,7 @@ export class RealtionshipFilterComponent implements OnInit {
       throw Error();
     }));
   }
+
   filterRelationsData(response) {
     let filteredObjectArray = [];
     filteredObjectArray.push(response[0]);
@@ -75,11 +88,16 @@ export class RealtionshipFilterComponent implements OnInit {
     console.log('final fetched types for relation is ', filteredObjectArray);
     return filteredObjectArray;
   }
+
   extractTypes(ObjectArray: any): any {
     let typesArray = [];
     ObjectArray.forEach(obj => {
       typesArray.push(obj['type']);
     });
     return typesArray;
+  }
+
+  emitSelectedData(){
+    this.selectedData.emit(this.selectedRelation);
   }
 }
