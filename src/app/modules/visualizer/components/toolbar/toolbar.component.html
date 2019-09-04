@@ -1,20 +1,20 @@
 <div class="wrapper-countlimit">
-  <div class="selected-count">{{selectedCount}} Elements Found</div>
-  <div class="nodeLimit">
-      <p class="nodelimit-head">Element Limit :</p>
-      <input type="text" [(ngModel)]=nodeLimit (ngModelChange)="limitChange(nodeLimit, popup)" suiPopup popupText="{{errorMessage}}" popupTrigger="manual" #popup="suiPopup" (keyup)="sendLimit($event, nodeLimit)">
-  </div>
-  <div class="creationToolbar">
-    <visualizer-create-nodes></visualizer-create-nodes>
-      <!-- <app-create-nodes [nodeTypes]="totalTypesArray" 
+    <div class="selected-count">{{selectedCount}} Elements Found</div>
+    <div class="nodeLimit">
+        <p class="nodelimit-head">Element Limit :</p>
+        <input type="text" [(ngModel)]=nodeLimit (ngModelChange)="limitChange(nodeLimit, popup)" suiPopup popupText="{{errorMessage}}" popupTrigger="manual" #popup="suiPopup" (keyup)="sendLimit($event, nodeLimit)">
+    </div>
+    <div class="creationToolbar">
+        <visualizer-create-nodes></visualizer-create-nodes>
+        <!-- <app-create-nodes [nodeTypes]="totalTypesArray" 
       [editData]="editNodeData" [editRelData]="editRelationData" 
       [hideDelModal]="hideDelModal" (nodeBtnEvent)="nodeEventCapture($event)" 
       (edgeBtnEvent)="edgeEventCapture($event)" [newNodeCreated]="promptRelationCreateAfterNode"
       (cleanData)="cleanPropertyBindingData($event)" (restoreEvent)="initRestoreData($event)"
       [restoredDataResponse]="restoredData"></app-create-nodes> -->
-  </div>
-  <!-- graph exporter -->
-  <div class="export">
-      <shared-graph-exporter></shared-graph-exporter>
-  </div>
+    </div>
+    <!-- graph exporter -->
+    <div class="export">
+        <shared-graph-exporter></shared-graph-exporter>
+    </div>
 </div>

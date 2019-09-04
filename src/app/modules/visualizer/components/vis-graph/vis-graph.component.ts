@@ -30,7 +30,7 @@ export class VisGraphComponent implements OnInit, OnChanges {
   public filteredGraphData: object = {};
   public network: any;
   public showDeletedData = false;
-  public selectedCount = null;
+  public selectedCount: number = 0;
   public loader = false;
   public hideDelModal = false;
   public colorConfig: object = {};
@@ -108,7 +108,7 @@ export class VisGraphComponent implements OnInit, OnChanges {
           // show filtered data
           this.graphData['nodes'] = this.graphUtility.createVisDataSet(this.filteredGraphData['nodes']);
         }
-        if (this.graphData.hasOwnProperty('length')) {
+        if (this.graphData.hasOwnProperty('nodes')) {
           this.selectedCount = this.graphData['nodes'].length;
         } else {
           this.selectedCount = 0;
