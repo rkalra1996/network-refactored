@@ -52,7 +52,15 @@ export class ColorPanelService {
       this.colorObj$.next(this.colorConfig);
     }
   }
-
+  
+/**
+ * Adds colors
+ * @description if the user opted for deleted data, simply set deleted default color to all the nodes
+ * @param resultObj 
+ * @param colorConfig 
+ * @returns result object which have gray color for deleted node 
+ * @author Neha Verma
+ */
   addColors(resultObj) {
     // if the user opted for deleted data, simply set deleted default color to all the nodes
     resultObj['seperateNodes'].forEach(node => {
@@ -80,9 +88,15 @@ export class ColorPanelService {
       }
     });
     return resultObj;
-
   }
 
+  /**
+   * Shifts color key
+   * @param elementObject 
+   * @param [previousObject] 
+   * @returns  a element object which have updated color value
+   * @author Rishabh Kalra
+   */
   shiftColorKey(elementObject, previousObject = null) {
     // To add a new color key in the root level if color is present in properties key
     if (elementObject.hasOwnProperty('properties') && elementObject['properties'].hasOwnProperty('color')) {

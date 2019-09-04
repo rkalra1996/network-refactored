@@ -1,3 +1,16 @@
-<p>
-  color-panel works!
-</p>
+<div class="wrapper">
+    <div class="panel">
+        <p class="panelTitle">Legend</p>
+        <div class="panelbody" *ngIf="showDropDown">
+            <ul class="panelList" type="none">
+                <ng-container *ngFor="let item of colorData">
+                    <li class="item" [ngStyle]="{color: item.color}"><span class="circle" [ngStyle]="{background: item.color}"></span>{{item?.name}}</li>
+                </ng-container>
+            </ul>
+        </div>
+        <div class="dropDown" (click)="toggleDropdown()">
+            <i class="fas fa-chevron-up" *ngIf="showDropDown"></i>
+            <i class="fas fa-chevron-down" *ngIf="!showDropDown"></i>
+        </div>
+    </div>
+</div>
