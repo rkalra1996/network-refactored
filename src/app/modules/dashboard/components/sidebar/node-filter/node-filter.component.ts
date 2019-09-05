@@ -1,3 +1,9 @@
+/**
+ * Node Filter
+ * @created_date 02/09/2019
+ * @version 1.0.0
+ * @author Neha Verma
+ */
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { forkJoin, throwError } from 'rxjs';
 import * as _ from 'lodash';
@@ -5,6 +11,7 @@ import { GraphNodeService } from '../../../services/graph-node-service/graph-nod
 import { SharedGraphService } from 'src/app/modules/visualizer/services/shared-graph-service/shared-graph.service';
 import { SearchService } from 'src/app/modules/visualizer/services/search-service/search.service';
 import { map } from 'rxjs/operators';
+import { ResetInterface, SelectedNodeInterface } from '../../../interfaces/sidebar-interface';
 
 @Component({
   selector: 'dashboard-node-filter',
@@ -13,18 +20,23 @@ import { map } from 'rxjs/operators';
 })
 export class NodeFilterComponent implements OnInit {
 
+  @Input() resetObj: ResetInterface = {reset: false};
   @Output() selectedData = new EventEmitter<object>(null);
   public totalAtrributeOptions: Array<object> = [];
   public selectedAttributeOptions: Array<object> = [];
-  public selectedGraph: { type: string, value: Array<string> }[] = [];
+  public selectedGraph: Array<SelectedNodeInterface> = [];
   public graphData: object = {};
   public totalNodesProperties: object = {};
   public totalRelationsProperties: object = {};
   public processedData;
   public nodeTypes2: Array<any> = [];
   public selectedDropdownOptions: object = {};
-  
-  // Query to fetch all labels
+
+  /**
+   * Query obj of node filter component
+   * @description create query object for fetching labels 
+   * @author Rishabh Kalra
+   */
   public queryObj = {
     raw: true,
     query: `MATCH (p) WITH DISTINCT keys(p) AS keys,p
@@ -38,7 +50,12 @@ export class NodeFilterComponent implements OnInit {
   ngOnInit() {
     this.getGraph();
   }
-  // set all data in sidebar dropdown
+
+  /**
+   * Gets graph
+   * @description set all data in sidebar dropdown
+   * @author Neha Verma
+   */
   getGraph() {
     this.totalAtrributeOptions = [];
     // fetch the properties of all the nodes and relationships
@@ -62,7 +79,13 @@ export class NodeFilterComponent implements OnInit {
       console.error(err);
     });
   }
-// for node properties
+
+/**
+ * Sets node properties
+ * @description for node properties
+ * @param response 
+ * @author Neha Verma
+ */
 setNodeProperties(response){
   if (response.hasOwnProperty('nodes')) {
     this.totalNodesProperties = _.cloneDeep(response['nodes']);
@@ -71,31 +94,39 @@ setNodeProperties(response){
       Object.keys(this.totalNodesProperties).forEach(keyName => {
         if (keyName !== 'deleted' && keyName !== 'color')
           this.totalAtrributeOptions.push({ attribute: keyName, options: this.totalNodesProperties[keyName], rotate: false });
-        // this.selectedAttributeOptions[keyName] = [];
       });
     }
     if (response.hasOwnProperty('relations')) {
       this.totalRelationsProperties = _.cloneDeep(response['relations']);
       this.sharedGraphService.setRelationProperties(this.totalRelationsProperties);
     }
-    console.log(this.totalNodesProperties, this.totalRelationsProperties);
-  }
+   }
   this.checkRotate();
   
 }
 
-// for types
+/**
+ * Sets types
+ * @description set node data into shared service
+ * @param response 
+ * @returns true if variable are successfully updated  
+ * @author Neha Verma
+ */
 setTypes(response){
 if(response){
 this.sharedGraphService.setProcessedData(this.processedData);
 this.sharedGraphService.setNodeTypes2(this.nodeTypes2);
-// this.typeOptions = this.nodeTypes2;
 this.totalAtrributeOptions.push({ attribute: 'Type', options: this.nodeTypes2, rotate: false });
 this.checkRotate();
 return true;
 }
 }
-// check for rotate object
+
+/**
+ * Checks rotate
+ * @description check for rotate object
+ * @author Neha Verma
+ */
 checkRotate(){
   // check for selected value so the dropdown should not close on refresh
   if(this.selectedAttributeOptions){
@@ -113,9 +144,15 @@ checkRotate(){
   });
 }
 }
+
+/**
+ * Gets node types
+ * @description get node types from database
+ * @returns a new array with node types
+ * @author Neha Verma 
+ */
 getNodeTypes() {
   return this.searchService.runQuery(this.queryObj).pipe(map(data => {
-    console.log('recieved label data from service ', data);
     this.processedData = this.processData(data);
     // extract types from the array
     this.extractLabels(this.processedData);
@@ -123,6 +160,16 @@ getNodeTypes() {
     return this.nodeTypes2;
   }));
 }
+
+/**
+ * Swaps node filter component
+ * @description swap in a array basis on provided index
+ * @param ArrayForSwapping 
+ * @param swapFromIndex 
+ * @param swapToIndex 
+ * @returns  
+ * @author Rishabh Kalra
+ */
 swap(ArrayForSwapping, swapFromIndex, swapToIndex) {
   let temArrayForSwapping = _.cloneDeep(ArrayForSwapping);
   const temp = temArrayForSwapping[swapFromIndex];
@@ -131,6 +178,12 @@ swap(ArrayForSwapping, swapFromIndex, swapToIndex) {
   return temArrayForSwapping;
 }
 
+/**
+ * Extracts labels
+ * @description extract labels of node from the response
+ * @param data 
+ * @author Rishabh Kalra
+ */
 extractLabels(data) {
   this.nodeTypes2 = [];
   data.forEach(label => {
@@ -138,6 +191,14 @@ extractLabels(data) {
   });
   // console.log('types are ', this.nodeTypes2);
 }
+
+/**
+ * Process data
+ * @description process data fetched from database
+ * @param data 
+ * @returns new array with node type and properties 
+ * @author Rishabh Kalra
+ */
 processData(data) {
   if (data.length > 0) {
     let tempData = [];
@@ -148,6 +209,12 @@ processData(data) {
   } else return [];
 }
 
+/**
+ * Prepares selected dropdown
+ * @description prepare selected data get from child (custom-semantic-dropdown)
+ * @param event 
+ * @author Neha Verma
+ */
 prepareSelectedDropdown(event:object){
   if(event){
     this.selectedDropdownOptions[Object.keys(event)[0]] = event[Object.keys(event)[0]];

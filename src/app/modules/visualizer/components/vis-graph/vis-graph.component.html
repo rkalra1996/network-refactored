@@ -1,4 +1,5 @@
-<visualizer-toolbar [editData]="editNodeData" [editRelData]="editRelationData"></visualizer-toolbar>
+<visualizer-color-panel *ngIf="!loader"></visualizer-color-panel>
+<visualizer-toolbar [editData]="editNodeData" [editRelData]="editRelationData" [selectedCount]="selectedCount"></visualizer-toolbar>
 <div class="graph-container" id="graphViewer">
 </div>
 

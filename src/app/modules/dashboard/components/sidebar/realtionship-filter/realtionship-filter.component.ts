@@ -1,16 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+/**
+ * Relationship Filter
+ * @created_date 02/09/2019
+ * @version 1.0.0
+ * @author Neha Verma
+ */
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { SharedGraphService } from 'src/app/modules/visualizer/services/shared-graph-service/shared-graph.service';
 import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { GraphRelationsService } from '../../../services/graph-relations-service/graph-relations.service';
+import { ResetInterface } from '../../../interfaces/sidebar-interface';
 
 @Component({
   selector: 'dashboard-realtionship-filter',
   templateUrl: './realtionship-filter.component.html',
   styleUrls: ['./realtionship-filter.component.scss']
 })
-export class RealtionshipFilterComponent implements OnInit {
+
+
+export class RealtionshipFilterComponent implements OnInit, OnChanges {
   
+  @Input() resetObj: ResetInterface = {reset: false};
+  @Output() selectedData = new EventEmitter<Array<string>>(null);
   public selectedRelation: Array<string> = [];
   public relationOptions: Array<string> = [];
   public relationTypeOptions: Array<any> = [];
@@ -24,6 +35,20 @@ export class RealtionshipFilterComponent implements OnInit {
       this.relationOptions = this.relationTypeOptions;
     });
   }
+
+  ngOnChanges(){
+    if(this.resetObj && typeof this.resetObj === 'object' && this.resetObj.hasOwnProperty('reset') && this.resetObj['reset'] === true){
+      this.selectedRelation = [];
+    }
+  }
+
+
+  /**
+   * Gets relation types
+   * @description get relationships from database
+   * @author Neha Verma
+   * @returns true value when data fetched successfuly 
+   */
   getRelationTypes() {
     return this.graphRelationsService.getGraphRelations().pipe(map(response => {
 
@@ -39,6 +64,14 @@ export class RealtionshipFilterComponent implements OnInit {
       throw Error();
     }));
   }
+
+  /**
+   * Filters relations data
+   * @description 
+   * @param response 
+   * @author Rishabh Kalra
+   * @returns filtered relation object
+   */
   filterRelationsData(response) {
     let filteredObjectArray = [];
     filteredObjectArray.push(response[0]);
@@ -75,11 +108,29 @@ export class RealtionshipFilterComponent implements OnInit {
     console.log('final fetched types for relation is ', filteredObjectArray);
     return filteredObjectArray;
   }
+
+
+  /**
+   * Extracts types
+   * @description extract types of the relations
+   * @param ObjectArray 
+   * @author Rishabh Kalra
+   * @returns array of relation types 
+   */
   extractTypes(ObjectArray: any): any {
     let typesArray = [];
     ObjectArray.forEach(obj => {
       typesArray.push(obj['type']);
     });
     return typesArray;
+  }
+
+  /**
+   * Emits selected data
+   * @description emit seleted relation to parent(sidebar)
+   * @author Neha Verma
+   */
+  emitSelectedData(){
+    this.selectedData.emit(this.selectedRelation);
   }
 }

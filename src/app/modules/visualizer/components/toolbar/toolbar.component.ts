@@ -9,7 +9,7 @@ export class ToolbarComponent implements OnInit {
 
   @Input() editData: object = {};
   @Input() editRelData: object = {};
-  public selectedCount = 10;
+  @Input() selectedCount: number = 0;
   public nodeLimit = 10;
   public errorMessage = "hello";
 

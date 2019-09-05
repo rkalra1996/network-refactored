@@ -1,9 +1,22 @@
+/**
+ * visualizer utility.
+ * @created_date 02/09/2019
+ * @version 1.0.0
+ * @author Rishabh Kalra
+ */
 import {DataSet, Network} from 'vis';
 
 export class VisualizerUtility {
 
     constructor() {}
 
+
+    /**
+     * Stringifys properties
+     * @description remove deleted and color key from tooltip for nodes and edges
+     * @param propertyObject 
+     * @returns node object with new tooltip values
+     */
     stringifyProperties(propertyObject) {
         if (propertyObject.constructor === Object) {
           let finalString = '';
@@ -18,6 +31,12 @@ export class VisualizerUtility {
         } else { return propertyObject['title']; }
       }
 
+
+      /**
+       * Gets vis graph options
+       * @returns vis graph options
+       * @author Rishabh Kalra 
+       */
       getVisGraphOptions(): object {
           return {
             physics: false,
@@ -42,6 +61,13 @@ export class VisualizerUtility {
           };
       }
 
+
+      /**
+       * Creates vis data set
+       * @param arrayOfObjects 
+       * @returns new dataset
+       * @author Rishabh Kalra 
+       */
       createVisDataSet(arrayOfObjects) {
           if (Array.isArray(arrayOfObjects)) {
             return new DataSet(arrayOfObjects);
@@ -50,4 +76,5 @@ export class VisualizerUtility {
               return [];
           }
       }
+
 }

@@ -1,6 +1,13 @@
+/**
+ * Sidebar
+ * @created_date 02/09/2019
+ * @version 1.0.0
+ * @author Neha Verma
+ */
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { SharedGraphService } from 'src/app/modules/visualizer/services/shared-graph-service/shared-graph.service';
 import * as _ from 'lodash';
+import { ResetInterface, SelectedEdgeInterface, SelectedNodeInterface } from '../../../interfaces/sidebar-interface';
 
 @Component({
   selector: 'dashboard-sidebar',
@@ -10,19 +17,29 @@ import * as _ from 'lodash';
 export class SidebarComponent implements OnInit {
 
   @Output() sidebarBtnClicked = new EventEmitter<object>();
-  public btnTextReset = "Reset";
-  public btnTextApply = "Apply";
+  public BUTTON_TEXT_RESET = "Reset";
+  public BUTTON_TEXT_APPLY = "Apply";
   public selectedAttributeOptions: Array<object> = [];
-  public selectedGraph: { type: string, value: Array<string> }[] = [];
   public selectedRelation: Array<string> = [];
+  public formatedSelectedRelation: Array<SelectedEdgeInterface> = [];
+  public selectedGraph: Array<SelectedNodeInterface> = [];
   public preSelectedRel: string;
-
+  private showDisabled: boolean = false;
+  public resetObj: ResetInterface = {reset: false};
   constructor(private sharedGraphData: SharedGraphService) { }
 
   ngOnInit() {
   }
-  searchGraph(isClicked: object = {isClicked : false},clickedFrom: string = 'node') {
-    if (isClicked) {
+
+  /**
+   * Searchs graph
+   * @description collect selected dropdown values in single object
+   * @param [isClicked] 
+   * @param [clickedFrom] 
+   * @author Neha Verma
+   */
+  searchGraph(isClicked: object = {isClicked : false},clickedFrom: string = 'nodes') {
+    if (isClicked && clickedFrom === 'nodes') {
       // button is clicked
       this.selectedGraph = [];
       if (this.selectedAttributeOptions) {
@@ -38,15 +55,31 @@ export class SidebarComponent implements OnInit {
         this.sidebarBtnClicked.emit({event: 'search'});
       }
     }
-    
-    } else {
+    } else if (isClicked && clickedFrom === 'relation') {
+      if (this.selectedRelation && typeof this.selectedRelation === 'object' && this.selectedRelation.length > 0) {
+        this.formatedSelectedRelation = [];
+        this.selectedRelation.map(rel => {
+          this.formatedSelectedRelation.push({ type: rel });
+        })
+        this.sidebarBtnClicked.emit({ event: 'search',nodes: [], edges: this.formatedSelectedRelation });
+      }  else {
+       // if no selected element
+       this.sidebarBtnClicked.emit({event: 'search'});
+      }
+     } else {
       // button is not clicked
     }
   }
 
-  resetGraph(data) {
+  /**
+   * Resets graph
+   * @description emit reset event to graph visualizer to reset vis-graph
+   * @param data 
+   * @author Neha Verma
+   */
+  resetGraph(event : Event) {
     // this.getGraph();
-    console.log("resetGraph");
+    // console.log("resetGraph");
     this.selectedAttributeOptions = [];
     this.selectedRelation = [];
     if (this.preSelectedRel) {
@@ -54,12 +87,48 @@ export class SidebarComponent implements OnInit {
       element.classList.remove("selected");
     }
     let obj = { event: 'reset' };
+    this.resetObj = {reset: true};
     this.sidebarBtnClicked.emit(obj);
   }
-  // to store selecetd dropdown data from child node-filter
+
+  /**
+   * Sets selected data
+   * @description to store selecetd nodes dropdown data from child node-filter
+   * @param [selectedData] 
+   * @author Neha Verma
+   */
   setSelectedData(selectedData: object = null){
     if(selectedData){
       this.selectedAttributeOptions = _.cloneDeep(selectedData);
     }
+  }
+
+    /**
+   * Sets selected relation data
+   * @description to store selecetd relation dropdown data from child relation-filter
+   * @param [selectedData] 
+   * @author Neha Verma
+   */
+  setSelectedRelData(selectedData: object = null){
+    if(selectedData){
+      this.selectedRelation = _.cloneDeep(selectedData);
+    }
+  }
+
+  /**
+   * Nodes limit toggle handler
+   * @description store toogle status in shared service
+   * @param event 
+   * @author Rishabh Kalra
+   */
+  NodeLimitToggleHandler(event) {
+    try {
+      if (event.constructor === Object) {
+        this.showDisabled = event['isOn'];
+      }
+    } catch (e) {
+      this.showDisabled = false;
+    }
+    this.sharedGraphData.sendToogleStatus(this.showDisabled);
   }
 }
