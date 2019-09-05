@@ -1,5 +1,5 @@
-<visualizer-color-panel *ngIf="!loader"></visualizer-color-panel>
-<visualizer-toolbar [editData]="editNodeData" [editRelData]="editRelationData" [selectedCount]="selectedCount"></visualizer-toolbar>
+<visualizer-color-panel></visualizer-color-panel>
+<visualizer-toolbar [editData]="editNodeData" [editRelData]="editRelationData" [nodeLimit]="nodeLimitValue['limit']" [selectedCount]="selectedCount" (nodeLimitEnterEvent)="sendLimitToSidebar($event,true)" (nodeLimitEvent)="sendLimitToSidebar($event)"></visualizer-toolbar>
 <div class="graph-container" id="graphViewer">
 </div>
 

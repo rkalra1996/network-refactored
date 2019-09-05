@@ -4,7 +4,7 @@
  * @version 1.0.0
  * @author Neha Verma
  */
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { forkJoin, throwError } from 'rxjs';
 import * as _ from 'lodash';
 import { GraphNodeService } from '../../../services/graph-node-service/graph-node.service';
@@ -18,7 +18,7 @@ import { ResetInterface, SelectedNodeInterface } from '../../../interfaces/sideb
   templateUrl: './node-filter.component.html',
   styleUrls: ['./node-filter.component.scss']
 })
-export class NodeFilterComponent implements OnInit {
+export class NodeFilterComponent implements OnInit,OnChanges {
 
   @Input() resetObj: ResetInterface = {reset: false};
   @Output() selectedData = new EventEmitter<object>(null);
@@ -49,6 +49,16 @@ export class NodeFilterComponent implements OnInit {
 
   ngOnInit() {
     this.getGraph();
+  }
+
+  ngOnChanges(){
+    if (this.resetObj && typeof this.resetObj === 'object' && this.resetObj.hasOwnProperty('reset')){
+      if (this.resetObj['reset'] === true){
+        this.getGraph();
+      } else {
+        // btn not clicked
+      }
+    }
   }
 
   /**
