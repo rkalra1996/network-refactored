@@ -1,0 +1,72 @@
+.wrapper {
+    background-color: transparent;
+    position: absolute;
+    right: 0;
+    padding-right: 20px;
+    padding-top: 20px;
+    z-index: 5;
+}
+
+.panel {
+    background-color: white;
+    border-radius: 10px;
+    width: 150px;
+    margin: auto;
+    margin-right: 0;
+}
+
+.panelTitle,
+.panelbody {
+    padding: 10px 5px;
+    max-height: 65vh;
+    overflow-y: auto;
+}
+
+.panelbody::-webkit-scrollbar {
+    width: 2px;
+}
+
+.panelTitle {
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+.panelList {
+    padding-left: 14px;
+}
+
+.item {
+    word-wrap: break;
+    line-height: 2;
+}
+
+.circle {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.dropDown {
+    cursor: pointer;
+    i {
+        display: block;
+        text-align: center;
+        font-size: 20px;
+        padding-bottom: 8px;
+    }
+}
+
+.display-ok {
+    display: block;
+}
+
+.no-display {
+    display: none;
+}
+
+.bg-red {
+    background-color: red !important;
+}
