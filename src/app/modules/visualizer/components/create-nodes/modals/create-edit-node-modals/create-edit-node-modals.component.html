@@ -8,11 +8,16 @@
       </button>
           </div>
           <div class="modal-body">
-              <b class="modal-text" style="font-size: 17px; font-weight:500;">This is create node modal</b>
+              <form class="createNewNodeTypeForm" [formGroup]="createNodeFormGroup" (ngSubmit)="storeNewType()">
+                <label class="createLabel">This is the label</label>
+                <div class="ui input" [ngClass]="{'error': newNodeType?.invalid || newNodeType?.touched}">
+                    <input type="text" placeholder="Search..." class="createLabel" formControlName="newNodeType">
+                  </div>
+              </form>
           </div>
           <div class="modal-footer">
               <button type="button" class="btn ui-button-text later" data-dismiss="modal">Maybe Later</button>
-              <button type="button" class="btn btn-danger" (click)="submitDelete(deleteContext)" id="del_btn">Close</button>
+              <button type="button" class="btn btn-primary create" (click)="storeNewType()" [disabled]="createNodeFormGroup?.controls?.newNodeType?.value === ''">Create</button>
           </div>
       </div>
   </div>

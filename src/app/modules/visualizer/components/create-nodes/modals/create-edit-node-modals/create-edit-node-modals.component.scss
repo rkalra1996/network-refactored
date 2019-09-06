@@ -1,0 +1,17 @@
+.modal-header {
+    background: #5f5f5f;
+    color: white;
+    border-color: #5f5f5f;
+    button.close {
+        color: white;
+    }
+}
+.createNewNodeTypeForm {
+    display: flex;
+    input {
+        flex: 1;
+    }
+    .createLabel {
+        flex: 1;
+    }
+}

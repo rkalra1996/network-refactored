@@ -1,15 +1,15 @@
 <div class="container-fluid">
     <div class="btn-group nodes">
-        <button type="button" (click)="createNode()" data-toggle="modal" data-target="#createNodeModal" class="btn" aria-expanded="false">
+        <button type="button" (click)="createNode('createNodeModal')" class="btn">
       Create Element
     </button>
     </div>
     <div class="btn-group relationships">
-        <button type="button" (click)="createRelation()" data-toggle="modal" data-target="#createRelationModal" class="btn" aria-expanded="false">
+        <button type="button" (click)="createRelation('createRelationModal')" data-toggle="modal" data-target="#createRelationModal" class="btn" aria-expanded="false">
       Create Relationship
     </button>
     </div>
 </div>
 <!-- <shared-simple-bs-delete-modal [deleteContext]="deleteModalDetails" (modalClosed)="DeleteClosedModal($event)"></shared-simple-bs-delete-modal> -->
-<visualizer-create-edit-node-modals></visualizer-create-edit-node-modals>
-<visualizer-create-edit-relation-modals></visualizer-create-edit-relation-modals>
+<visualizer-create-edit-node-modals (modalCloseEvent)="closedModal($event)"></visualizer-create-edit-node-modals>
+<visualizer-create-edit-relation-modals (modalCloseEvent)="closedModal($event)"></visualizer-create-edit-relation-modals>
