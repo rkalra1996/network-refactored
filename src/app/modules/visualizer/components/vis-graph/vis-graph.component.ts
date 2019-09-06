@@ -15,6 +15,8 @@ import * as _ from 'lodash';
 import { SharedGraphService } from '../../services/shared-graph-service/shared-graph.service';
 import { NodeLimit, FilterRequestBody } from '../../interfaces/vis-graph-interfaces';
 import { TypeCheckService } from 'src/app/modules/shared/services/type-check/type-check.service';
+import { ToasterService } from 'src/app/modules/shared/toaster/services/toaster/toaster.service';
+import { ToasterData } from 'src/app/modules/shared/toaster/interfaces/toaster-data';
 
 @Component({
   selector: 'visualizer-vis-graph',
@@ -40,9 +42,11 @@ export class VisGraphComponent implements OnInit, OnChanges {
   private NODE_DEFAULT_LIMIT: number = 149;
   private graphUtility = new VisualizerUtility();
   public nodeLimitValue: NodeLimit = {limit : this.NODE_DEFAULT_LIMIT};
+  private toasterMessage: object = {};
 
   constructor(private graphVisualizerSrvc: GraphVisualizerService, private colorSrvc: ColorPanelService, private sharedGraphService: SharedGraphService,
-    private typeCheckService:TypeCheckService) {
+    private typeCheckService:TypeCheckService,
+    private toasterService:ToasterService) {
   
   }
 
@@ -76,6 +80,9 @@ export class VisGraphComponent implements OnInit, OnChanges {
       console.error('An error occured while subscribing to the toggle for deleted data', err);
       this.showDeletedData = false;
       this.displayInitialGraph();
+    });
+    this.toasterService.toasterMessages$.subscribe(result=>{
+      this.toasterMessage = result;
     });
   }
   ngOnChanges() {
@@ -141,9 +148,17 @@ export class VisGraphComponent implements OnInit, OnChanges {
         console.log('double click');
         // this.graphUtility.doubleClickHandler(event);
       });
+      if(this.toasterMessage){
+        let toasterData : ToasterData = {title:this.toasterMessage['GRAPH_SUCCESS_TITILE'],message:this.toasterMessage['GRPAH_SUCCESS_MESSAGE'],timeOut:2000};
+        this.toasterService.showSuccess(toasterData);
+        
+      }
+      
     }, err => {
       console.error('An error occured while retrieving initial graph data', err);
-      this.loader = true;
+      let toasterData : ToasterData = {title:this.toasterMessage['GRAPH_ERROR_TITLE'],message:this.toasterMessage['GRAPH_ERROR_MESSAGE']};
+      this.toasterService.showError(toasterData);
+      // this.loader = true;
       this.graphData = {};
     });
     // activate double click event for editing a node or a relationship
