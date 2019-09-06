@@ -9,15 +9,17 @@ import { CustomSemanticDropdownComponent } from './components/custom-semantic-dr
 import { ToggleSwitchComponent } from './components/toggle-switch/toggle-switch.component';
 import { SuiSelectModule, SuiModule } from 'ng2-semantic-ui';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToasterModule } from './toaster/toaster.module';
 
 @NgModule({
   declarations: [GraphExporterComponent, SimpleBsDeleteModalComponent, GrayButtonComponent, CustomSemanticDropdownComponent, ToggleSwitchComponent],
   imports: [
     CommonModule,
     SharedRoutingModule,
+    ToasterModule,
     SuiSelectModule, SuiModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   exports: [GraphExporterComponent, SimpleBsDeleteModalComponent, GrayButtonComponent, CustomSemanticDropdownComponent, ToggleSwitchComponent]
 })
