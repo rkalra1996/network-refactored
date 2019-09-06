@@ -4,7 +4,7 @@
  * @version 1.0.0
  * @author Rishabh Kalra
  */
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { GraphVisualizerService } from '../../services/graph-visualizer-service/graph-visualizer.service';
 import { ColorPanelService } from './../../services/color-panel-service/color-panel.service';
 import { DataSet, Network } from 'vis';
@@ -13,6 +13,8 @@ import { VisualizerUtility } from './../../utilities/visualizer-utilities/visual
 
 import * as _ from 'lodash';
 import { SharedGraphService } from '../../services/shared-graph-service/shared-graph.service';
+import { NodeLimit, FilterRequestBody } from '../../interfaces/vis-graph-interfaces';
+import { TypeCheckService } from 'src/app/modules/shared/services/type-check/type-check.service';
 
 @Component({
   selector: 'visualizer-vis-graph',
@@ -22,23 +24,26 @@ import { SharedGraphService } from '../../services/shared-graph-service/shared-g
 export class VisGraphComponent implements OnInit, OnChanges {
 
   @Input() sidebarBtnClicked: object = null;
-  private graphUtility: any;
-
+  @Output() nodeLimitEnterEvent = new EventEmitter<NodeLimit>(null);
   private graphOptions: object = {};
   public graphData: object = {};
   public allGraphData: object = {};
   public filteredGraphData: object = {};
   public network: any;
-  public showDeletedData = false;
+  public showDeletedData: boolean = false;
   public selectedCount: number = 0;
-  public loader = false;
-  public hideDelModal = false;
+  public loader: boolean = false;
+  public hideDelModal:boolean = false;
   public colorConfig: object = {};
-  private SIDEBAR_EVENTS_SEARCH = 'search';
-  private SIDEBAR_EVENTS_RESET = 'reset';
+  private SIDEBAR_EVENTS_SEARCH:string = 'search';
+  private SIDEBAR_EVENTS_RESET:string = 'reset';
+  private NODE_DEFAULT_LIMIT: number = 149;
+  private graphUtility = new VisualizerUtility();
+  public nodeLimitValue: NodeLimit = {limit : this.NODE_DEFAULT_LIMIT};
 
-  constructor(private graphVisualizerSrvc: GraphVisualizerService, private colorSrvc: ColorPanelService, private sharedGraphService: SharedGraphService) {
-    this.graphUtility = new VisualizerUtility();
+  constructor(private graphVisualizerSrvc: GraphVisualizerService, private colorSrvc: ColorPanelService, private sharedGraphService: SharedGraphService,
+    private typeCheckService:TypeCheckService) {
+  
   }
 
   ngOnInit() {
@@ -103,7 +108,7 @@ export class VisGraphComponent implements OnInit, OnChanges {
         // check for show deleted toggel
         if (this.showDeletedData) {
           // show all data
-          this.graphData['nodes'] = this.graphUtility.createVisDataset(this.allGraphData['nodes']);
+          this.graphData['nodes'] = this.graphUtility.createVisDataSet(this.allGraphData['nodes']);
         } else {
           // show filtered data
           this.graphData['nodes'] = this.graphUtility.createVisDataSet(this.filteredGraphData['nodes']);
@@ -184,10 +189,11 @@ export class VisGraphComponent implements OnInit, OnChanges {
    */
   updateGraphOnSidebarEvent(sidebarBtnEvent: string) {
     this.loader = true;
-    if (sidebarBtnEvent && sidebarBtnEvent === this.SIDEBAR_EVENTS_SEARCH) {
+    if (this.typeCheckService.isString(sidebarBtnEvent) && sidebarBtnEvent === this.SIDEBAR_EVENTS_SEARCH) {
       this.showGraphData();
-    } else if (sidebarBtnEvent && sidebarBtnEvent === this.SIDEBAR_EVENTS_RESET) {
+    } else if (this.typeCheckService.isString(sidebarBtnEvent) && sidebarBtnEvent === this.SIDEBAR_EVENTS_RESET) {
       this.displayInitialGraph();
+      this.nodeLimitValue['limit'] = this.NODE_DEFAULT_LIMIT;
     } else {
       // invalid sideBarEvent recieved
     }
@@ -201,18 +207,21 @@ export class VisGraphComponent implements OnInit, OnChanges {
    */
   showGraphData() {
     this.loader = true;
-    let requestBody = {};
-    if (this.sidebarBtnClicked && typeof this.sidebarBtnClicked === 'object') {
+    let requestBody: FilterRequestBody = {};
+    if (this.typeCheckService.isObject(this.sidebarBtnClicked)) {
       if(this.sidebarBtnClicked.hasOwnProperty('nodes')){
         requestBody['nodes'] = this.sidebarBtnClicked['nodes'];
       }
       if(this.sidebarBtnClicked.hasOwnProperty('edges')){
         requestBody['edges'] = this.sidebarBtnClicked['edges'];
+      }
+      if (this.typeCheckService.isObject(this.nodeLimitValue) && this.nodeLimitValue.hasOwnProperty('limit') && !isNaN(this.nodeLimitValue['limit'])) {
+        requestBody['limit'] = this.nodeLimitValue['limit'];
       } 
       this.graphVisualizerSrvc.getSearchDataV2(requestBody).subscribe(result => {
         // set data for vis
         if (result && typeof result === 'object' && result.hasOwnProperty('seperateNodes') && result.hasOwnProperty('seperateEdges')) {
-          result = this.graphUtility.addColors(result, this.colorConfig);
+          result = this.colorSrvc.addColors(result);
           // store all data without any filter
           this.allGraphData['nodes'] = result['seperateNodes'];
           this.allGraphData['edges'] = result['seperateEdges'];
@@ -221,19 +230,19 @@ export class VisGraphComponent implements OnInit, OnChanges {
           //check for show deleted 
           if (this.showDeletedData) {
             // show all data
-            this.graphData['nodes'] = new DataSet(this.allGraphData['nodes']);
+            this.graphData['nodes'] = this.graphUtility.createVisDataSet(this.allGraphData['nodes']);
 
           } else {
             // remove deleted data
-            this.graphData['nodes'] = new DataSet(this.filteredGraphData['nodes']);
+            this.graphData['nodes'] = this.graphUtility.createVisDataSet(this.filteredGraphData['nodes']);
           }
           this.selectedCount = this.graphData['nodes'].length;
         }
         if (result && typeof result === 'object' && result.hasOwnProperty('seperateEdges')) {
           if (this.showDeletedData) {
-            this.graphData['edges'] = new DataSet(this.allGraphData['edges']);
+            this.graphData['edges'] = this.graphUtility.createVisDataSet(this.allGraphData['edges']);
           } else {
-            this.graphData['edges'] = new DataSet(this.filteredGraphData['edges']);
+            this.graphData['edges'] = this.graphUtility.createVisDataSet(this.filteredGraphData['edges']);
           }
 
         }
@@ -292,5 +301,24 @@ export class VisGraphComponent implements OnInit, OnChanges {
     }
     this.loader = false;
   }
+  
+  /**
+   * Sends limit to sidebar
+   * @description this function is responsible to send the nodeLimit value to the sidebar so that apply function can be clicked
+   * @param event 
+   * @author Rishabh Kalra
+   */
+  sendLimitToSidebar(event: NodeLimit = null, EnterEvent: boolean = false) {
+    if (this.typeCheckService.isObject(event) && event.hasOwnProperty('limit') && !isNaN(event['limit'])) {
+      if(this.typeCheckService.isBoolean(EnterEvent) && EnterEvent){
+        this.nodeLimitEnterEvent.emit(event);
+      } else {
 
+      }
+      this.nodeLimitValue = event;
+    } else {
+     // console.log('nodelimit is not a number');
+     // this.nodeLimitValue = null;
+    }
+  }
 }

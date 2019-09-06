@@ -8,13 +8,29 @@ import { Component, OnInit } from '@angular/core';
 export class MainComponent implements OnInit {
 
   public sidebarEvent: object = null;
+  public nodeLimit: object = null;
   constructor() { }
 
   ngOnInit() {
   }
-  sidebarEventFetch(event : object = null){
-    if(event){
+
+  /**
+   * Sidebars event fetch
+   * @param [event] 
+   */
+  sidebarEventFetch(event: object = null){
+    if(event && typeof event === 'object'){
       this.sidebarEvent = event;
+    }
+  }
+
+  /**
+   * Nodes limit event
+   * @param [event] 
+   */
+  nodeLimitEvent(event: object = null){
+    if(event && typeof event === 'object'){
+      this.nodeLimit = event;
     }
   }
 }

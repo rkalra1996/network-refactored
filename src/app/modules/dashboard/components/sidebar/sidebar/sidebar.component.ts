@@ -4,19 +4,21 @@
  * @version 1.0.0
  * @author Neha Verma
  */
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, OnChanges, Input } from '@angular/core';
 import { SharedGraphService } from 'src/app/modules/visualizer/services/shared-graph-service/shared-graph.service';
 import * as _ from 'lodash';
 import { ResetInterface, SelectedEdgeInterface, SelectedNodeInterface } from '../../../interfaces/sidebar-interface';
+import { TypeCheckService } from 'src/app/modules/shared/services/type-check/type-check.service';
 
 @Component({
   selector: 'dashboard-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit,OnChanges {
 
   @Output() sidebarBtnClicked = new EventEmitter<object>();
+  @Input('nodeLimitEnterEvent') nodeLimitOnEnter: any = null;
   public BUTTON_TEXT_RESET = "Reset";
   public BUTTON_TEXT_APPLY = "Apply";
   public selectedAttributeOptions: Array<object> = [];
@@ -26,11 +28,21 @@ export class SidebarComponent implements OnInit {
   public preSelectedRel: string;
   private showDisabled: boolean = false;
   public resetObj: ResetInterface = {reset: false};
-  constructor(private sharedGraphData: SharedGraphService) { }
+
+  constructor(private sharedGraphData: SharedGraphService, private typeCheckService:TypeCheckService) { }
 
   ngOnInit() {
   }
 
+  ngOnChanges(){
+    // detect if the user hit enter while entering the nodelimit value
+    if (this.typeCheckService.isObject(this.nodeLimitOnEnter)) {
+      // user pressed entered after filling a valid number
+      console.log('enter detected after ', this.nodeLimitOnEnter);
+      this.searchGraph();
+    }
+  }
+  
   /**
    * Searchs graph
    * @description collect selected dropdown values in single object
@@ -42,13 +54,13 @@ export class SidebarComponent implements OnInit {
     if (isClicked && clickedFrom === 'nodes') {
       // button is clicked
       this.selectedGraph = [];
-      if (this.selectedAttributeOptions) {
+      if (this.typeCheckService.isObject(this.selectedAttributeOptions)) {
         Object.keys(this.selectedAttributeOptions).forEach(selectedKey => {
         if (this.selectedAttributeOptions[selectedKey].length > 0) {
           this.selectedGraph.push({ type: selectedKey, value: this.selectedAttributeOptions[selectedKey] });
         }
       });
-      if (this.selectedGraph.length > 0) {
+      if (this.typeCheckService.isArray(this.selectedGraph)) {
         this.sidebarBtnClicked.emit({ event: 'search', nodes: this.selectedGraph });
       } else {
         // if no selected element
@@ -56,7 +68,7 @@ export class SidebarComponent implements OnInit {
       }
     }
     } else if (isClicked && clickedFrom === 'relation') {
-      if (this.selectedRelation && typeof this.selectedRelation === 'object' && this.selectedRelation.length > 0) {
+      if (this.typeCheckService.isArray(this.selectedRelation)) {
         this.formatedSelectedRelation = [];
         this.selectedRelation.map(rel => {
           this.formatedSelectedRelation.push({ type: rel });
@@ -78,8 +90,6 @@ export class SidebarComponent implements OnInit {
    * @author Neha Verma
    */
   resetGraph(event : Event) {
-    // this.getGraph();
-    // console.log("resetGraph");
     this.selectedAttributeOptions = [];
     this.selectedRelation = [];
     if (this.preSelectedRel) {
