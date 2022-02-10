@@ -29,7 +29,7 @@
     "lodash": "^4.17.14",
     "ng2-semantic-ui": "^0.9.7",
     "ngx-color-picker": "^8.1.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "vis": "^4.21.0",
     "core-js": "^2.5.4",
     "rxjs": "~6.3.3",
